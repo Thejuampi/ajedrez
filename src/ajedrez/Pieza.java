@@ -1,30 +1,29 @@
 package ajedrez;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.util.List;
+
+import com.google.common.base.Preconditions;
+
 public abstract class Pieza {
 
-	private String nombre;
+	protected String nombre;
 	
-	private Posicion posicionActual;
+	protected Posicion posicionActual;
+	
+	protected boolean habilitada = true;
 
-	private boolean blanca;
+	protected boolean blanca = true;
 	
 	public Pieza(String nombre, Posicion posicion) {
+		checkNotNull(posicion, "La posicion no puede ser nula!");
+		checkNotNull(nombre, "El nombre no puede ser nulo!");
 		this.nombre = nombre;
 		this.posicionActual = posicion;
 	}
 
-	public boolean cambiarPosicion(Posicion posicionSiguiente){
-		
-		if(esMovimientoValido(posicionSiguiente)){
-			this.posicionActual = posicionSiguiente;
-			return true;
-		} else {
-			return false;
-		}
-		
-	}
-
-	public abstract boolean esMovimientoValido(Posicion posicionSiguiente);
+	public abstract List<Posicion> getProximosMovimientos();
 
 	public String getNombre() {
 		return nombre;

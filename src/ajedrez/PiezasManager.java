@@ -62,6 +62,14 @@ public class PiezasManager {
 	}
 
 	public Pieza parse(String str, boolean isBlanca) {
+		Pieza result = parse(str);
+		if(result != null) {
+			result.setBlanca(isBlanca);
+		}
+		return result;
+	}
+
+	public Pieza parse(String str) {
 		Pieza result = null;
 		if (str.length() > 0 && str.length() <= 3) {
 			String primerLetra = str.substring(0, 1);
@@ -109,18 +117,6 @@ public class PiezasManager {
 				}
 			}
 		}
-		if(result != null) {
-			result.setBlanca(isBlanca);
-		}
 		return result;
-	}
-
-	/**
-	 * Genera una pieza blanca por defecto
-	 * @param string
-	 * @return
-	 */
-	public Pieza parse(String string) {
-		return parse(string, true);
 	}
 }

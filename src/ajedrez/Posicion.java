@@ -2,15 +2,21 @@ package ajedrez;
 
 public class Posicion {
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((columna == null) ? 0 : columna.hashCode());
-		result = prime * result + ((fila == null) ? 0 : fila.hashCode());
-		return result;
-	}
+	private String fila;
 
+	private String columna;
+
+	public Posicion(String fila, String columna) {
+		super();
+		this.fila = fila;
+		this.columna = columna;
+	}
+	
+	public Posicion(Posicion pos){
+		this.fila = pos.fila;
+		this.columna = pos.columna;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -33,35 +39,34 @@ public class Posicion {
 		return true;
 	}
 
-	private String fila;
-	
-	@Override
-	public String toString() {
-		return "Posicion [fila=" + fila + ", columna=" + columna + "]";
-	}
-
-	private String columna;
-
-	public Posicion(String fila, String columna) {
-		super();
-		this.fila = fila;
-		this.columna = columna;
+	public String getColumna() {
+		return columna;
 	}
 
 	public String getFila() {
 		return fila;
 	}
 
-	public void setFila(String fila) {
-		this.fila = fila;
-	}
-
-	public String getColumna() {
-		return columna;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((columna == null) ? 0 : columna.hashCode());
+		result = prime * result + ((fila == null) ? 0 : fila.hashCode());
+		return result;
 	}
 
 	public void setColumna(String columna) {
 		this.columna = columna;
+	}
+
+	public void setFila(String fila) {
+		this.fila = fila;
+	}
+
+	@Override
+	public String toString() {
+		return "Posicion [fila=" + fila + ", columna=" + columna + "]";
 	}
 
 }
