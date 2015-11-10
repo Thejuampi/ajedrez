@@ -3,7 +3,6 @@ package ajedrez;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 public class PiezasManagerTest {

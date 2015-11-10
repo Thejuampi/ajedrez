@@ -11,7 +11,10 @@ import utils.TjUtils;
 
 public class Main {
 
+	
 	public static void main(String[] args) {
+
+		PiezasManager mng = PiezasManager.INSTANCE;
 
 		out.println(TjUtils.to80Chars(""));
 		out.println(TjUtils.to80Chars(" Proyecto Final Electiva \"Ajedrez\" "));
@@ -26,14 +29,15 @@ public class Main {
 		out.println("Ahora ingrese la posición de las piezas NEGRAS:");
 		String negras = readLine();
 		
-		String[] piezas = blancas.split(",");
-		for(String pieza : piezas){
+		if( mng.parsearPiezas(blancas) && mng.parsearPiezas(negras) ){
+		
+			//TODO: separar las piezas en blancas y negras.
 			
-			
-			
+		} else {
+			out.print(TjUtils.to80Chars(""));
+			out.println(TjUtils.to80Chars("Datos Ingresados no validos:"));
+			out.print(TjUtils.to80Chars(""));
 		}
-		
-		
 	}
 	
 	private static String readLine() {

@@ -18,19 +18,19 @@ public enum PiezasEnum {
 	
 	PiezasEnum(int id, String nomenclatura){
 		this.id = id;
-		this.nomenclaruta = nomenclatura;
+		this.nomenclatura = nomenclatura;
 	}
 	
 	private static Map<String, PiezasEnum> buildMapaByNombre() {
 		Builder<String, PiezasEnum> builder = ImmutableMap.builder();
 		for(PiezasEnum value : values()) {
-			builder.put(value.nomenclaruta, value);
+			builder.put(value.nomenclatura, value);
 		}
 		return builder.build();
 	}
 
 	public final int id;
-	public final String nomenclaruta;
+	public final String nomenclatura;
 	
 	public static PiezasEnum getByNomenclatura(String nom) {
 		return mapaValoresByNombre.get(nom);

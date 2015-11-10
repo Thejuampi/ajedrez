@@ -5,7 +5,7 @@ import utils.PiezasEnum;
 public class Alfil extends Pieza{
 
 	public Alfil(Posicion posicion) {
-		super(PiezasEnum.ALFIL.nomenclaruta, posicion);
+		super(PiezasEnum.ALFIL.nomenclatura, posicion);
 	}
 
 	@Override

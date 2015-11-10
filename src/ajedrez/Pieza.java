@@ -10,7 +10,7 @@ public abstract class Pieza {
 		this.nombre = nombre;
 		this.posicionActual = posicion;
 	}
-	
+
 	public boolean cambiarPosicion(Posicion posicionSiguiente){
 		
 		if(esMovimientoValido(posicionSiguiente)){
@@ -21,7 +21,23 @@ public abstract class Pieza {
 		}
 		
 	}
-	
+
 	public abstract boolean esMovimientoValido(Posicion posicionSiguiente);
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public Posicion getPosicionActual() {
+		return posicionActual;
+	}
+	
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+	
+	public void setPosicionActual(Posicion posicionActual) {
+		this.posicionActual = posicionActual;
+	}
 	
 }

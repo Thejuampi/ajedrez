@@ -5,7 +5,7 @@ import utils.PiezasEnum;
 public class Dama extends Pieza {
 
 	public Dama(Posicion posicion) {
-		super(PiezasEnum.DAMA.nomenclaruta, posicion);
+		super(PiezasEnum.DAMA.nomenclatura, posicion);
 	}
 
 	@Override

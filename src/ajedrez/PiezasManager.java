@@ -23,11 +23,25 @@ public class PiezasManager {
 	private Set<String> buildNomenclaturasSet() {
 		Builder<String> builder = ImmutableSet.builder();
 		for (PiezasEnum pieza : PiezasEnum.values()) {
-			builder.add(pieza.nomenclaruta);
+			builder.add(pieza.nomenclatura);
 		}
 		return builder.build();
 	}
 
+	public boolean parsearPiezas(String linea) {
+		String[] piezas = linea.split(",");
+		for(String piezaStr : piezas){
+			Pieza pieza = parse(piezaStr);
+			if(pieza == null) {
+				return false;
+			} else {
+				addPieza(pieza.getPosicionActual(), pieza);
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public boolean addPieza(Posicion pos, Pieza pieza) {
 		if (this.mapaPiezas.get(pos) == null) {
 			if( this.validarPosicion(pos, pieza)) {
@@ -40,8 +54,7 @@ public class PiezasManager {
 
 	private boolean validarPosicion(Posicion pos, Pieza pieza) {
 		
-		
-		return false;
+		return true;
 	}
 
 	public Pieza getPieza(Posicion pos) {
@@ -60,25 +73,23 @@ public class PiezasManager {
 						char num = str.charAt(2);
 						if (num >= '1' && num <= '8') {
 							Posicion pos = new Posicion(String.valueOf(num), segundaLetra);
-							if (mapaPiezas.get(pos) == null) {
-								PiezasEnum piezaEnum = PiezasEnum.getByNomenclatura(primerLetra);
-								if(piezaEnum != null) {
-									switch (piezaEnum) {
-									case ALFIL:
-										result = new Alfil(pos);
-									case CABALLO:
-										result = new Caballo(pos);
-									case DAMA:
-										result = new Dama(pos);
-									case PEON: // esto no deberia poder alcanzarse
-										result = new Peon(pos);
-									case REY:
-										result = new Rey(pos);
-									case TORRE:
-										result = new Torre(pos);
-									default:
-										break;
-									}
+							PiezasEnum piezaEnum = PiezasEnum.getByNomenclatura(primerLetra);
+							if(piezaEnum != null) {
+								switch (piezaEnum) {
+								case ALFIL:
+									result = new Alfil(pos);
+								case CABALLO:
+									result = new Caballo(pos);
+								case DAMA:
+									result = new Dama(pos);
+								case PEON: // esto no deberia poder alcanzarse
+									result = new Peon(pos);
+								case REY:
+									result = new Rey(pos);
+								case TORRE:
+									result = new Torre(pos);
+								default:
+									break;
 								}
 							}
 						}
