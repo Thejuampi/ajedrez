@@ -11,16 +11,16 @@ import utils.PiezasEnum;
 
 public class Dama extends Pieza {
 
-	private int[] filas = new int[64];
+	private static final int[] filas = new int[256];
 
-	private int[] colum = new int[64];
+	private static final int[] colum = new int[256];
 
 	int ultimaPosicion = 0;
-
+	
 	VerticalesGenerator verticalesGenerator = VerticalesGenerator.INSTANCE;
 	HorizontalesGenerator horizontalesGenerator = HorizontalesGenerator.INSTANCE;
 	DiagonalesGenerator diagonalesGenerator = DiagonalesGenerator.INSTANCE;
-
+	
 	public Dama(Posicion posicion) {
 		super(PiezasEnum.DAMA.nomenclatura, posicion);
 		verticalesGenerator.generarVerticales(ultimaPosicion, filas, colum);
@@ -30,7 +30,7 @@ public class Dama extends Pieza {
 
 	@Override
 	public List<Posicion> getProximosMovimientos() {
-		List<Posicion> posiciones = Lists.newArrayListWithExpectedSize(64);
+		List<Posicion> posiciones = Lists.newArrayListWithExpectedSize(8);
 		for (int i = 0; i < filas.length; ++i)
 			agregarSiNoEsNulo(posiciones, sumar(posicionActual, filas[i], colum[i]));
 		return posiciones;

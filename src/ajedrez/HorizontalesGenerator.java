@@ -7,8 +7,13 @@ public class HorizontalesGenerator implements MovimientoHorizontal {
 	private HorizontalesGenerator(){}
 	
 	public void generarHorizontales(int ultimaPosicion, int[] filas, int[] colum) {
-		// TODO Auto-generated method stub
-
+		for (int i = 0; i < 8; ++i) {
+			filas[ultimaPosicion + 2*i]    =  0;
+			filas[ultimaPosicion + 2*i +1] =  0;
+			colum[ultimaPosicion + 2*i] = (i+1);
+			colum[ultimaPosicion + 2*i +1] = -(i+1);
+		}
+		ultimaPosicion += 16;
 	}
 
 }
