@@ -29,7 +29,7 @@ public class Main {
 		out.println("Ahora ingrese la posición de las piezas NEGRAS:");
 		String negras = readLine();
 		
-		if( mng.parsearPiezas(blancas) && mng.parsearPiezas(negras) ){
+		if( mng.parsearPiezas(blancas, true) && mng.parsearPiezas(negras, false) ){
 		
 			//TODO: separar las piezas en blancas y negras.
 			

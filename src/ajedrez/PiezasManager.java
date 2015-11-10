@@ -28,32 +28,32 @@ public class PiezasManager {
 		return builder.build();
 	}
 
-	public boolean parsearPiezas(String linea) {
+	public boolean parsearPiezas(String linea, boolean isBlancas) {
 		String[] piezas = linea.split(",");
 		for(String piezaStr : piezas){
-			Pieza pieza = parse(piezaStr);
+			piezaStr = piezaStr.trim();
+			Pieza pieza = parse(piezaStr, isBlancas);
 			if(pieza == null) {
 				return false;
 			} else {
 				addPieza(pieza.getPosicionActual(), pieza);
-				return true;
 			}
 		}
-		return false;
+		return true;
 	}
 	
 	public boolean addPieza(Posicion pos, Pieza pieza) {
-		if (this.mapaPiezas.get(pos) == null) {
-			if( this.validarPosicion(pos, pieza)) {
-				this.mapaPiezas.put(pos, pieza);
-				return true;
-			}
-		} 
+		if( this.validarPosicion(pos, pieza)) {
+			this.mapaPiezas.put(pos, pieza);
+			return true;
+		}
 		return false;
 	}
 
 	private boolean validarPosicion(Posicion pos, Pieza pieza) {
-		
+		if (this.mapaPiezas.get(pos) == null) {
+			
+		}
 		return true;
 	}
 
@@ -61,7 +61,7 @@ public class PiezasManager {
 		return this.mapaPiezas.get(pos);
 	}
 
-	public Pieza parse(String str) {
+	public Pieza parse(String str, boolean isBlanca) {
 		Pieza result = null;
 		if (str.length() > 0 && str.length() <= 3) {
 			String primerLetra = str.substring(0, 1);
@@ -78,16 +78,22 @@ public class PiezasManager {
 								switch (piezaEnum) {
 								case ALFIL:
 									result = new Alfil(pos);
+									break;
 								case CABALLO:
 									result = new Caballo(pos);
+									break;
 								case DAMA:
 									result = new Dama(pos);
+									break;
 								case PEON: // esto no deberia poder alcanzarse
 									result = new Peon(pos);
+									break;
 								case REY:
 									result = new Rey(pos);
+									break;
 								case TORRE:
 									result = new Torre(pos);
+									break;
 								default:
 									break;
 								}
@@ -103,6 +109,18 @@ public class PiezasManager {
 				}
 			}
 		}
+		if(result != null) {
+			result.setBlanca(isBlanca);
+		}
 		return result;
+	}
+
+	/**
+	 * Genera una pieza blanca por defecto
+	 * @param string
+	 * @return
+	 */
+	public Pieza parse(String string) {
+		return parse(string, true);
 	}
 }
