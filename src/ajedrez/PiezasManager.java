@@ -1,8 +1,11 @@
 package ajedrez;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSet.Builder;
 import com.google.common.collect.Maps;
@@ -36,25 +39,89 @@ public class PiezasManager {
 			if(pieza == null) {
 				return false;
 			} else {
-				addPieza(pieza.getPosicionActual(), pieza);
+				if(!addPieza(pieza.getPosicionActual(), pieza)){
+					return false;
+				}
 			}
 		}
 		return true;
+	}
+	
+	public boolean validarCondicionInicialDeTodasLasPiezas() {
+		boolean result = true;
+		
+		Collection<Pieza> blancas = Collections2.filter(mapaPiezas.values(), new Predicate<Pieza>() {
+			public boolean apply(Pieza input) {
+				return input.isBlanca();
+			}
+		});
+		
+		Collection<Pieza> negras = Collections2.filter(mapaPiezas.values(), new Predicate<Pieza>() {
+			public boolean apply(Pieza input) {
+				return !input.isBlanca();
+			}
+		});
+		
+		Collection<Pieza> reyesBlanco = Collections2.filter(blancas, new Predicate<Pieza>() {
+			public boolean apply(Pieza input) {
+				return input instanceof Rey;
+			}
+		});
+		
+		if(reyesBlanco.size() != 1){
+			return false;
+		}
+		
+		Collection<Pieza> reyesNegro = Collections2.filter(negras, new Predicate<Pieza>() {
+			public boolean apply(Pieza input) {
+				return input instanceof Rey;
+			}
+		});
+		
+		if(reyesNegro.size() != 1){
+			return false;
+		}
+		
+		Collection<Pieza> damasBlancas = Collections2.filter(blancas, new Predicate<Pieza>() {
+			public boolean apply(Pieza input) {
+				return input instanceof Dama;
+			}
+		});
+		
+		if(damasBlancas.size() != 1) {
+			return false;
+		}
+		
+		Collection<Pieza> damasNegras = Collections2.filter(negras, new Predicate<Pieza>(){
+			public boolean apply(Pieza input) {
+				return input instanceof Dama;
+			}
+		});
+		
+		if(damasNegras.size() != 1) {
+			return false;
+		}
+		
+		
+		
+		return result;
 	}
 	
 	public boolean addPieza(Posicion pos, Pieza pieza) {
 		if( this.validarPosicion(pos, pieza)) {
 			this.mapaPiezas.put(pos, pieza);
 			return true;
+		} else {
+			return false;
 		}
-		return false;
 	}
 
 	private boolean validarPosicion(Posicion pos, Pieza pieza) {
-		if (this.mapaPiezas.get(pos) == null) {
-			
+		if (this.mapaPiezas.get(pos) == null) {// si el lugar esta desocupado...
+			return true;
+		} else {
+			return false;
 		}
-		return true;
 	}
 
 	public Pieza getPieza(Posicion pos) {

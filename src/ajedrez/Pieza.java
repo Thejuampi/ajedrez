@@ -4,8 +4,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.List;
 
-import com.google.common.base.Preconditions;
-
 public abstract class Pieza {
 
 	protected String nombre;

@@ -1,9 +1,10 @@
-package ajedrez;
+package ajedrez_;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
+import ajedrez.PiezasManager;
 
 public class PiezasManagerTest {
 

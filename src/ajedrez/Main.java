@@ -30,8 +30,6 @@ public class Main {
 		String negras = readLine();
 		
 		if( mng.parsearPiezas(blancas, true) && mng.parsearPiezas(negras, false) ){
-		
-			//TODO: separar las piezas en blancas y negras.
 			
 		} else {
 			out.print(TjUtils.to80Chars(""));
