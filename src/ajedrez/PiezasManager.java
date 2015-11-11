@@ -62,47 +62,100 @@ public class PiezasManager {
 			}
 		});
 		
-		Collection<Pieza> reyesBlanco = Collections2.filter(blancas, new Predicate<Pieza>() {
+		Predicate<Pieza> predicadoReyes = new Predicate<Pieza>() {
 			public boolean apply(Pieza input) {
 				return input instanceof Rey;
 			}
-		});
-		
+		};
+		Collection<Pieza> reyesBlanco = Collections2.filter(blancas, predicadoReyes);
 		if(reyesBlanco.size() != 1){
 			return false;
 		}
 		
-		Collection<Pieza> reyesNegro = Collections2.filter(negras, new Predicate<Pieza>() {
-			public boolean apply(Pieza input) {
-				return input instanceof Rey;
-			}
-		});
-		
+		Collection<Pieza> reyesNegro = Collections2.filter(negras, predicadoReyes);
 		if(reyesNegro.size() != 1){
 			return false;
 		}
 		
-		Collection<Pieza> damasBlancas = Collections2.filter(blancas, new Predicate<Pieza>() {
+		Predicate<Pieza> predicadoDamas = new Predicate<Pieza>(){
 			public boolean apply(Pieza input) {
 				return input instanceof Dama;
 			}
-		});
+		};
 		
-		if(damasBlancas.size() != 1) {
+		Collection<Pieza> damasBlancas = Collections2.filter(blancas, predicadoDamas);
+		if(damasBlancas.size() > 1) {
 			return false;
 		}
 		
-		Collection<Pieza> damasNegras = Collections2.filter(negras, new Predicate<Pieza>(){
+		Collection<Pieza> damasNegras = Collections2.filter(negras, predicadoDamas);
+		if(damasNegras.size() > 1) {
+			return false;
+		}
+		
+		Predicate<Pieza> predicadoCaballos = new Predicate<Pieza>() {
 			public boolean apply(Pieza input) {
-				return input instanceof Dama;
+				return input instanceof Caballo;
 			}
-		});
+		};
+		Collection<Pieza> caballosBlancos = Collections2.filter(blancas, predicadoCaballos);
+		if(caballosBlancos.size() > 2) {
+			return false;
+		}
 		
-		if(damasNegras.size() != 1) {
+		Collection<Pieza> CaballosNegros = Collections2.filter(negras, predicadoCaballos);
+		if(CaballosNegros.size() > 2) {
+			return false;
+		}
+		
+		Predicate<Pieza> predicadoAlfil = new Predicate<Pieza>() {
+			public boolean apply(Pieza input) {
+				return input instanceof Alfil;
+			}
+		};
+		
+		Collection<Pieza> alfilesBlancos = Collections2.filter(blancas, predicadoAlfil);
+		if(alfilesBlancos.size() > 2) {
+			return false;
+		}
+		
+		Collection<Pieza> alfilesnegros = Collections2.filter(negras, predicadoAlfil);
+		if(alfilesnegros.size() > 2) {
+			return false;
+		}
+		
+		Predicate<Pieza> predicadoTorres = new Predicate<Pieza>() {
+			public boolean apply(Pieza input) {
+				return input instanceof Torre;
+			}
+		};
+		
+		Collection<Pieza> torresBlancos = Collections2.filter(blancas, predicadoTorres);
+		if(torresBlancos.size() > 2) {
+			return false;
+		}
+		
+		Collection<Pieza> torressnegros = Collections2.filter(negras, predicadoTorres);
+		if(torressnegros.size() > 2) {
 			return false;
 		}
 		
 		
+		Predicate<Pieza> predicadoPeones = new Predicate<Pieza>() {
+			public boolean apply(Pieza input) {
+				return input instanceof Torre;
+			}
+		};
+		
+		Collection<Pieza> peonesBlancos = Collections2.filter(blancas, predicadoPeones);
+		if(peonesBlancos.size() > 8) {
+			return false;
+		}
+		
+		Collection<Pieza> peonesNegros = Collections2.filter(negras, predicadoPeones);
+		if(peonesNegros.size() > 8) {
+			return false;
+		}
 		
 		return result;
 	}
