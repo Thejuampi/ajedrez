@@ -2,7 +2,11 @@ package ajedrez;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+
+import com.google.common.collect.Lists;
 
 public abstract class Pieza {
 
@@ -13,15 +17,18 @@ public abstract class Pieza {
 	protected boolean habilitada = true;
 
 	protected boolean blanca = true;
+
+	protected List<Explorer> explorers = Lists.newArrayListWithCapacity(8);
+	
+	protected abstract Explorer[] getExplorers();
 	
 	public Pieza(String nombre, Posicion posicion) {
 		checkNotNull(posicion, "La posicion no puede ser nula!");
 		checkNotNull(nombre, "El nombre no puede ser nulo!");
 		this.nombre = nombre;
 		this.posicionActual = posicion;
+		Collections.addAll(explorers, getExplorers());
 	}
-
-	public abstract List<Posicion> getProximosMovimientos();
 
 	public String getNombre() {
 		return nombre;
@@ -81,6 +88,14 @@ public abstract class Pieza {
 	
 	public boolean isBlanca() {
 		return blanca;
+	}
+
+	public List<Posicion> getProximosMovimientos(Collection<Pieza> piezas) {
+		List<Posicion> posiciones = Lists.newArrayListWithExpectedSize(64);
+		for (Explorer explorer : explorers) {
+			posiciones.addAll(explorer.explorar(piezas));
+		}
+		return posiciones;
 	}
 	
 }

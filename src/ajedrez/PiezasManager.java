@@ -1,6 +1,7 @@
 package ajedrez;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -48,8 +49,6 @@ public class PiezasManager {
 	}
 	
 	public boolean validarCondicionInicialDeTodasLasPiezas() {
-		boolean result = true;
-		
 		Collection<Pieza> blancas = Collections2.filter(mapaPiezas.values(), new Predicate<Pieza>() {
 			public boolean apply(Pieza input) {
 				return input.isBlanca();
@@ -157,7 +156,25 @@ public class PiezasManager {
 			return false;
 		}
 		
-		return result;
+		Rey reyBlanco = (Rey) reyesBlanco.iterator().next();
+		
+		for(Pieza negra : negras) {
+			List<Posicion> movimientos = negra.getProximosMovimientos(blancas);
+			if(movimientos.contains(reyBlanco.getPosicionActual())) {
+				return false;
+			}
+		}
+		
+		Rey reyNegro = (Rey) reyesNegro.iterator().next();
+		
+		for(Pieza blanca : blancas) {
+			List<Posicion> movimientos = blanca.getProximosMovimientos(negras);
+			if(movimientos.contains(reyNegro.getPosicionActual())) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 	
 	public boolean addPieza(Posicion pos, Pieza pieza) {
