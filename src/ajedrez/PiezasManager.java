@@ -8,6 +8,7 @@ import java.util.Set;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.ImmutableSet.Builder;
 import com.google.common.collect.Maps;
 
@@ -256,4 +257,64 @@ public class PiezasManager {
 		}
 		return result;
 	}
+
+	public boolean init(String blancas, String negras) {
+		return this.parsearPiezas(blancas, true) && this.parsearPiezas(negras, false) && validarCondicionInicialDeTodasLasPiezas();
+	}
+
+	/**
+	 * 
+	 * @return Colección de posiciones que indican las jugadas necesarias para dar jaque mate.
+	 */
+	public Collection<Posicion> buscarSolucion() {
+		
+		Collection<Pieza> blancas = Collections2.filter(mapaPiezas.values(), new Predicate<Pieza>() {
+			public boolean apply(Pieza input) {
+				return input.isBlanca();
+			}
+		});
+		
+		Collection<Pieza> negras = Collections2.filter(mapaPiezas.values(), new Predicate<Pieza>() {
+			public boolean apply(Pieza input) {
+				return !input.isBlanca();
+			}
+		});
+		
+		Predicate<Pieza> predicadoRey = new Predicate<Pieza>() {
+			public boolean apply(Pieza input) {
+				return input instanceof Rey;
+			}
+		};
+		
+		Rey reyNegro = (Rey) Iterables.find(negras, predicadoRey);
+		Rey reyBlanco = (Rey) Iterables.find(blancas, predicadoRey);
+		
+		boolean terminar = false;
+		for(Pieza blanca : blancas) {
+			if(terminar) break;
+			for(Posicion pBlanca : blanca.getProximosMovimientos(negras)) {
+				
+				/**
+				 * ¿Es Jaque inicial?
+				 */
+				if( pBlanca.equals(reyNegro.posicionActual) ) {
+					terminar = true;
+					break;
+				}
+				/**
+				 * Captura inicial?
+				 * Tengo sueño, son las 01:42 am ZZZZZzzzz
+				 */
+				for(Pieza negra : negras) {
+					if(blanca.posicionActual.equals(negra.posicionActual)){
+						break;
+					}
+				}
+				
+			}
+		}
+		
+		return null;
+	}
+	
 }
