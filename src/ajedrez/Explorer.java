@@ -19,17 +19,23 @@ public abstract class Explorer {
 		List<Posicion> posiciones = Lists.newArrayListWithCapacity(8);
 		int i = 0;
 		boolean terminar = false;
+		boolean agregar = true;
 		while (i < getLoopLimit() || terminar) {
-			Posicion p = PosicionMathUtils.sumar(pieza.posicionActual, getFila(i),getColumna(i));
-			if(p != null) {
-				for(Pieza pieza : piezas) {
-					if(p.equals(pieza.getPosicionActual())) {
+			Posicion nuevaPosicion = PosicionMathUtils.sumar(pieza.posicionActual, getFila(i),getColumna(i));
+			if(nuevaPosicion != null) {
+				for(Pieza pieza : piezas)  {
+					if( !this.pieza.equals(pieza) && nuevaPosicion.equals(pieza.getPosicionActual())) {
+						if(this.pieza.isBlanca() != pieza.isBlanca()){
+							agregar = true;
+						} else {
+							agregar = false; 
+						}
 						terminar = true;
 						break;
 					}
 				}
-				if(!terminar) {
-					posiciones.add(p);
+				if(agregar) {
+					posiciones.add(nuevaPosicion);
 				}
 			}
 			++i;

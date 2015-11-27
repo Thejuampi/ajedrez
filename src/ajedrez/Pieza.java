@@ -8,7 +8,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-public abstract class Pieza {
+public class Pieza {
 
 	protected String nombre;
 	
@@ -20,7 +20,9 @@ public abstract class Pieza {
 
 	protected List<Explorer> explorers = Lists.newArrayListWithCapacity(8);
 	
-	protected abstract Explorer[] getExplorers();
+	protected Explorer[] getExplorers(){
+		return (Explorer[]) this.explorers.toArray();
+	};
 	
 	public Pieza(String nombre, Posicion posicion) {
 		checkNotNull(posicion, "La posicion no puede ser nula!");
@@ -28,6 +30,12 @@ public abstract class Pieza {
 		this.nombre = nombre;
 		this.posicionActual = posicion;
 		Collections.addAll(explorers, getExplorers());
+	}
+	
+	public Pieza(Pieza other) {
+		this.nombre = other.nombre;
+		this.posicionActual = new Posicion(other.posicionActual);
+		this.explorers=other.explorers;
 	}
 
 	public String getNombre() {

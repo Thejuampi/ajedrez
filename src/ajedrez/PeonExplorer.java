@@ -26,6 +26,8 @@ public class PeonExplorer extends Explorer {
 	@Override
 	public List<Posicion> explorar(Collection<Pieza> piezas) {
 		Peon peon = (Peon) pieza;
+		// FIXME! Considerar la posibilidad de que las piezas puedan ser del mismo color.
+		// En dicho caso, no se debe poder agregar el movimiento a la lista de movimientos (posiciones)
 		List<Posicion> posiciones = Lists.newArrayListWithExpectedSize(4);
 		if (peon.posicionInicial) { // el peon puede adelantar 2 posiciones si esta en posicion inicial
 			if (peon.isBlanca()) {

@@ -1,9 +1,13 @@
 package ajedrez;
 
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.apache.commons.lang3.time.DateUtils;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
@@ -11,6 +15,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.ImmutableSet.Builder;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import utils.PiezasEnum;
 
@@ -21,6 +26,7 @@ public class PiezasManager {
 	public static PiezasManager INSTANCE = new PiezasManager();
 
 	private final Set<String> nomenclaturaPiezas = buildNomenclaturasSet();
+
 
 	private PiezasManager() {
 	}
@@ -268,13 +274,14 @@ public class PiezasManager {
 	 */
 	public Collection<Posicion> buscarSolucion() {
 		
-		Collection<Pieza> blancas = Collections2.filter(mapaPiezas.values(), new Predicate<Pieza>() {
+		Collection<Pieza> piezas = mapaPiezas.values();
+		Collection<Pieza> blancas = Collections2.filter(piezas, new Predicate<Pieza>() {
 			public boolean apply(Pieza input) {
 				return input.isBlanca();
 			}
 		});
 		
-		Collection<Pieza> negras = Collections2.filter(mapaPiezas.values(), new Predicate<Pieza>() {
+		Collection<Pieza> negras = Collections2.filter(piezas, new Predicate<Pieza>() {
 			public boolean apply(Pieza input) {
 				return !input.isBlanca();
 			}
@@ -289,32 +296,29 @@ public class PiezasManager {
 		Rey reyNegro = (Rey) Iterables.find(negras, predicadoRey);
 		Rey reyBlanco = (Rey) Iterables.find(blancas, predicadoRey);
 		
-		boolean terminar = false;
+		GameState inicial = new GameState(blancas, negras);
+		Set<Integer> gameStates = Sets.newHashSet(inicial.hashCode());
+		
 		for(Pieza blanca : blancas) {
-			if(terminar) break;
-			for(Posicion pBlanca : blanca.getProximosMovimientos(negras)) {
+			Posicion posicionOriginal = blanca.getPosicionActual();
+			for(Posicion posicion : blanca.getProximosMovimientos(piezas)){
+				blanca.setPosicionActual(posicion);
+				GameState state = new GameState(blancas, negras);
 				
-				/**
-				 * ¿Es Jaque inicial?
-				 */
-				if( pBlanca.equals(reyNegro.posicionActual) ) {
-					terminar = true;
-					break;
-				}
-				/**
-				 * Captura inicial?
-				 * Tengo sueño, son las 01:42 am ZZZZZzzzz
-				 */
-				for(Pieza negra : negras) {
-					if(blanca.posicionActual.equals(negra.posicionActual)){
-						break;
+				if(!gameStates.contains(state.hashCode())) { //computo el hash, porque consume menos memoria que guardar el estado completo
+					
+					blanca.setPosicionActual(posicionOriginal);
+					if(! reyNegro.getPosicionActual().equals(posicion) && true ) {
+						
 					}
 				}
-				
 			}
+			
 		}
 		
 		return null;
 	}
+	
+	
 	
 }
