@@ -307,11 +307,44 @@ public class PiezasManager {
 				
 				if(!gameStates.contains(state.hashCode())) { //computo el hash, porque consume menos memoria que guardar el estado completo
 					
-					blanca.setPosicionActual(posicionOriginal);
-					if(! reyNegro.getPosicionActual().equals(posicion) && true ) {
+					if(! reyNegro.getPosicionActual().equals(posicion) && mapaPiezas.get(posicion) == null ) { // sin jaque ni captura inicial
+						
+						//FASE 2: Mueve el negro
+						
+						for(Pieza negra : negras) {
+							Posicion posicionNegraOrigina = negra.getPosicionActual();
+							for(Posicion posicionNegra : negra.getProximosMovimientos(piezas)) {
+								negra.setPosicionActual(posicionNegra);
+								GameState state2 = new GameState(blancas, negras);
+								if(!gameStates.contains(state2.hashCode())) { // si el movimiento no fue jugado antes
+									
+									for(Pieza blanca2 : blancas) {
+										Posicion posicionOriginalBlanca2 = blanca2.posicionActual;
+										for(Posicion posicionBlanca2 : blanca2.getProximosMovimientos(piezas)){
+											
+											//TODO Falta ver como determinar que la posicion representa un jaque mate
+											// Probablemente tenga que recorrer todas las piezas negras (de nuevo)
+											// y ver si puedo "tapar" o mover el rey
+											
+											
+										}
+										
+										blanca2.setPosicionActual(posicionOriginalBlanca2);
+									}
+									
+									
+								}
+							}
+							// cuando termine de probar los movimientos con la negra, la devuelvo a su posicion
+							// original, y sigo con otra pieza
+							negra.setPosicionActual(posicionNegraOrigina); 
+						}
+						
 						
 					}
 				}
+				//Devuelvo la blanca a su posicion original y sigo probando con otra pieza
+				blanca.setPosicionActual(posicionOriginal);
 			}
 			
 		}
