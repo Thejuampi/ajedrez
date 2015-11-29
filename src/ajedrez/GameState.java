@@ -39,4 +39,35 @@ public class GameState {
 		pieza.setPosicionActual(posicion);
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((blancas == null) ? 0 : blancas.hashCode());
+		result = prime * result + ((negras == null) ? 0 : negras.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		GameState other = (GameState) obj;
+		if (blancas == null) {
+			if (other.blancas != null)
+				return false;
+		} else if (!blancas.equals(other.blancas))
+			return false;
+		if (negras == null) {
+			if (other.negras != null)
+				return false;
+		} else if (!negras.equals(other.negras))
+			return false;
+		return true;
+	}
+
 }

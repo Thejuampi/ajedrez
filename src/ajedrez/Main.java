@@ -25,10 +25,11 @@ public class Main {
 		out.println("Ingrese la posición de las piezas BLANCAS con notacion estandar:");
 		out.println("Ejemplo: Rh6, d2, Aa2");
 		
-		String blancas = readLine();
+//		String blancas = readLine();
+		String blancas = "Rd5,Db1";
 		out.println("Ahora ingrese la posición de las piezas NEGRAS:");
-		String negras = readLine();
-		
+//		String negras = readLine();
+		String negras = "Ra8";
 		
 		
 		if( mng.init(blancas, negras) ) { 
@@ -37,11 +38,11 @@ public class Main {
 			out.println(to80Chars("que en 2 movimientos, sin captura inicial, sin jaque inicial "));
 			out.println(to80Chars("y sin blablabla den jaque mate                               "));
 			
-			Collection<Posicion> solucion = mng.buscarSolucion();
+			Collection<Pieza> solucion = mng.buscarSolucion();
 			StringBuilder str = new StringBuilder();
 			if(!solucion.isEmpty()) {
-				for(Posicion p : solucion) {
-					str.append(p.toString());
+				for(Pieza p : solucion) {
+					str.append(p.toString()).append(",");
 				}
 				out.println("La Solución encontrada es: " + str.toString());
 			} else {

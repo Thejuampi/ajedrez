@@ -18,7 +18,7 @@ public class PosicionMathUtils {
 		char posibleFilaSiguiente = (char) (cFila+nFila);
 		char posibleColuSiguiente = (char) (cColu+nColumna);
 		
-		if(posibleFilaSiguiente > '8' || posibleColuSiguiente > 'h' || posibleFilaSiguiente < '0' || posibleColuSiguiente < 'a'){
+		if(posibleFilaSiguiente > '8' || posibleColuSiguiente > 'h' || posibleFilaSiguiente < '1' || posibleColuSiguiente < 'a'){
 			//throw new RuntimeException("La posicion pretendida no es posible: [fila=" + posibleFilaSiguiente +"] columna = [" + posibleColuSiguiente + "]");
 			p = null;
 		} else {
