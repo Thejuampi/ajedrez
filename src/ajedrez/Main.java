@@ -56,6 +56,7 @@ public class Main {
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	private static String readLine() {
         String line = null;
         Console c = System.console();

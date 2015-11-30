@@ -53,7 +53,7 @@ public class Pieza {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
+		final int prime = 37;
 		int result = 1;
 		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
 		result = prime * result + ((posicionActual == null) ? 0 : posicionActual.hashCode());

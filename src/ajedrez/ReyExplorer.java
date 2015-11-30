@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -28,31 +27,15 @@ public class ReyExplorer extends Explorer {
 	public List<Posicion> explorar(Collection<Pieza> piezas) {
 		List<Posicion> posiciones = Lists.newArrayListWithCapacity(8);
 		
-		Map<Posicion, Pieza> mapa = Maps.uniqueIndex(piezas, new Function<Pieza,Posicion>(){
-			public Posicion apply(Pieza t) {
-				return t.posicionActual;
-			}
-		});
-		
-		Collection<Pieza> enemigas = Collections2.filter(piezas, new Predicate<Pieza>(){
-			public boolean apply(Pieza input) {
-				return input.blanca != pieza.blanca;
-			}
-		});
-		
+		Map<Posicion, Pieza> mapa = Maps.uniqueIndex(piezas, (Function<Pieza, Posicion>) t -> t.posicionActual);
+		Collection<Pieza> enemigas = Collections2.filter(piezas, input -> input.blanca != pieza.blanca);
 		Set<Posicion> posicionesEnemigas = Sets.newHashSet();
 		
 		for(Pieza enemiga : enemigas) {
-			if(!(enemiga instanceof Rey)){
-				posicionesEnemigas.addAll(enemiga.getProximosMovimientos(piezas));
+			if(enemiga instanceof Rey) {
+				posicionesEnemigas.addAll(enemiga.getProximosMovimientos(Collections2.filter(piezas, input -> !input.equals(enemiga))));
 			} else {
-				//La idea de esto es que se agreguen todos los movimientos sin tener en cuenta el rey enemigo??? no me gusta mucho, pero vamos a ver que pasa
-				posicionesEnemigas.addAll(enemiga.getProximosMovimientos(Collections2.filter(piezas, new Predicate<Pieza>() {
-					public boolean apply(Pieza input) {
-						return !input.equals(pieza);
-					}
-				})));
-				//TODO Ver que hacer cuando compara los posibles movimientos del rey enemigo
+				posicionesEnemigas.addAll(enemiga.getProximosMovimientos(piezas));
 			}
 		}
 		

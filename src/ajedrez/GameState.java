@@ -11,11 +11,14 @@ public class GameState {
 
 	private Collection<Pieza> negras;
 	
-	public GameState(Collection<Pieza> blancas, Collection<Pieza> negras){
-		saveState(blancas, negras);
+	private Pieza piezaJugando;
+	
+	public GameState(Pieza piezaJugando, Collection<Pieza> blancas, Collection<Pieza> negras){
+		saveState(piezaJugando, blancas, negras);
 	}
 
-	public void saveState(Collection<Pieza> blancas, Collection<Pieza> negras) {
+	public void saveState(Pieza piezaJugando, Collection<Pieza> blancas, Collection<Pieza> negras) {
+		this.piezaJugando = piezaJugando;
 		int nBlancas = blancas.size();
 		int nNegras = negras.size();
 		List<Pieza> nuevasBlancas = Lists.newArrayListWithExpectedSize(nBlancas);
@@ -45,6 +48,7 @@ public class GameState {
 		int result = 1;
 		result = prime * result + ((blancas == null) ? 0 : blancas.hashCode());
 		result = prime * result + ((negras == null) ? 0 : negras.hashCode());
+		result = prime * result + ((piezaJugando == null) ? 0 : piezaJugando.hashCode());
 		return result;
 	}
 
@@ -66,6 +70,11 @@ public class GameState {
 			if (other.negras != null)
 				return false;
 		} else if (!negras.equals(other.negras))
+			return false;
+		if (piezaJugando == null) {
+			if (other.piezaJugando != null)
+				return false;
+		} else if (!piezaJugando.equals(other.piezaJugando))
 			return false;
 		return true;
 	}

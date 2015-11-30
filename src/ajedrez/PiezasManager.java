@@ -1,12 +1,11 @@
 package ajedrez;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.apache.commons.collections4.CollectionUtils;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
@@ -14,6 +13,7 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSet.Builder;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -294,18 +294,16 @@ public class PiezasManager {
 		};
 		
 		Rey reyNegro = (Rey) Iterables.find(negras, predicadoRey);
-//		Rey reyBlanco = (Rey) Iterables.find(blancas, predicadoRey);
 		
-		GameState inicial = new GameState(blancas, negras);
-		Set<Integer> gameStates = Sets.newHashSet(inicial.hashCode());
-		
+		List<GameState> gameStates = Lists.newArrayList();
 		for(Pieza blanca : blancas) {
 			Posicion posicionOriginal = blanca.getPosicionActual();
 			for(Posicion posicion : blanca.getProximosMovimientos(piezas)){
 				blanca.setPosicionActual(posicion);
-				GameState state = new GameState(blancas, negras);
-				
-				if(!gameStates.contains(state.hashCode())) { //computo el hash, porque consume menos memoria que guardar el estado completo
+				Pieza copiaBlanca = new Pieza(blanca);
+				GameState state = new GameState(blanca, blancas, negras);
+				if(!gameStates.contains(state)) { //computo el hash, porque consume menos memoria que guardar el estado completo
+					gameStates.add(state);
 					Collection<Posicion> lugaresDeAtaque = blanca.getProximosMovimientos(piezas);
 					if(! lugaresDeAtaque.contains(reyNegro.posicionActual) //sin jaque
 							&& mapaPiezas.get(posicion) == null ) { // Ni captura inicial. 
@@ -314,18 +312,20 @@ public class PiezasManager {
 							Posicion posicionNegraOrigina = negra.getPosicionActual();
 							for(Posicion posicionNegra : negra.getProximosMovimientos(piezas)) {
 								negra.setPosicionActual(posicionNegra);
-								GameState state2 = new GameState(blancas, negras);
-								if(!gameStates.contains(state2.hashCode())) { // si el movimiento no fue jugado antes
+								GameState state2 = new GameState(negra, blancas, negras);
+								if(!gameStates.contains(state2)) { // si el movimiento no fue jugado antes
+									gameStates.add(state2);
 									//TODO: Capturar pieza blanca...
 									for(Pieza blanca2 : blancas) {
 										Posicion posicionOriginalBlanca2 = blanca2.posicionActual;
 										for(Posicion posicionBlanca2 : blanca2.getProximosMovimientos(piezas)){
 											blanca2.setPosicionActual(posicionBlanca2);
-											int hashCode3 = new GameState(blancas, negras).hashCode();
-											if(!gameStates.contains(hashCode3)) {
-												gameStates.add(hashCode3);
+											GameState state3 = new GameState(blanca2, blancas, negras);
+											if(!gameStates.contains(state3)) {
+												gameStates.add(state3);
 												if(isJaqueMate(blanca2, posicionBlanca2, blancas, negras)) {
-													return Arrays.asList(blanca, negra, blanca2);
+													// TODO CORREGIR: blanca = blanca2 => el movimiento no se muestra correctamente
+													return Arrays.asList(copiaBlanca, negra, blanca2);
 												}	
 											} 
 										}
@@ -339,34 +339,42 @@ public class PiezasManager {
 						}
 					}
 				}
-				//Devuelvo la blanca a su posicion original y sigo probando con otra pieza
-				blanca.setPosicionActual(posicionOriginal);
 			}
+			//Devuelvo la blanca a su posicion original y sigo probando con otra pieza
+			blanca.setPosicionActual(posicionOriginal);
 		}
 		return Arrays.asList();
 	}
-	
-	private boolean isJaqueMate(Pieza pieza, Posicion posicion, Collection<Pieza> piezasAliadas, Collection<Pieza> piezasEnemigas) {
-//		Function<Pieza, Posicion> function = new Function<Pieza, Posicion>() {
-//			public Posicion apply(Pieza input) {
-//				return input.posicionActual;
-//			}
-//		};
-//		
-//		Map<Posicion, Pieza> mapaEnemigas = Maps.uniqueIndex(piezasEnemigas, function);
-//		Map<Posicion, Pieza> mapaAliadas = Maps.uniqueIndex(piezasAliadas, function);
-		
-		Rey reyEnemigo = (Rey) Iterables.find(piezasEnemigas, new Predicate<Pieza>() {
-			public boolean apply(Pieza input) {
-				return input instanceof Rey;
-			}
-		});
 
-		//Esto es horrible, pero bueno, no tengo tiempo de ponerme a pensar.
-		List<Posicion> posicionesRey = reyEnemigo.getProximosMovimientos(CollectionUtils.union(piezasAliadas, piezasEnemigas));
+	public boolean isJaqueMate(Pieza pieza, Posicion posicion, Collection<Pieza> piezasAliadas, Collection<Pieza> piezasEnemigas) {
+		Rey reyEnemigo = (Rey) Iterables.find(piezasEnemigas, input -> input instanceof Rey);
+		List<Posicion> posicionesRey = reyEnemigo.getProximosMovimientos( mapaPiezas.values() );
+		Set<Posicion> posicionesAliadas = Sets.newHashSet();
+		Map<Posicion, Pieza> mapaAliadas = Maps.uniqueIndex(piezasAliadas, (Function<Pieza, Posicion>) input -> input.posicionActual);
+		
+		for(Pieza aliada : piezasAliadas) {
+			posicionesAliadas.addAll(aliada.getProximosMovimientos(mapaPiezas.values()));
+		}
+
+		for(Posicion pos : new ArrayList<Posicion>(posicionesRey)) {
+			Pieza ppp = mapaAliadas.get(pos);
+			if( ppp != null ) {
+				Collection<Pieza> filtradas = Collections2.filter(mapaPiezas.values(), input -> !input.equals(ppp));
+				Collection<Pieza> aliadasFiltradas = Collections2.filter(filtradas, input -> input.blanca == pieza.blanca);
+				
+				Set<Posicion> posAliadas = Sets.newHashSet();
+				for(Pieza piezaFiltrada : aliadasFiltradas) {
+					posAliadas.addAll(piezaFiltrada.getProximosMovimientos(filtradas));
+				}
+				// Esto significa que si el rey toma esta pieza, pero la misma es defendida por otra, esta en jaque.
+				if(posAliadas.contains(pos)) {
+					posicionesRey.remove(pos);
+				}
+			}
+		}
 		
 		if(	posicionesRey.isEmpty() // si no tiene mas movimientos
-			&& posicion.equals(reyEnemigo.posicionActual)){ // y la posicion en cuestion da jaque) {
+			&& posicionesAliadas.contains(reyEnemigo.posicionActual) ){ // y las piezas aliadas atacan al rey enemigo {
 			return true;
 		}
 		

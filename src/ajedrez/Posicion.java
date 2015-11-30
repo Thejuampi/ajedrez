@@ -51,8 +51,7 @@ public class Posicion {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((columna == null) ? 0 : columna.hashCode());
-		result = prime * result + ((fila == null) ? 0 : fila.hashCode());
+		result = prime * result + columna.hashCode() + fila.hashCode();
 		return result;
 	}
 
@@ -66,7 +65,7 @@ public class Posicion {
 
 	@Override
 	public String toString() {
-		return "Posicion [fila=" + fila + ", columna=" + columna + "]";
+		return "["+columna+fila+"]";
 	}
 
 }
