@@ -33,8 +33,9 @@ public class ReyExplorer extends Explorer {
 		
 		for(Pieza enemiga : enemigas) {
 			if(enemiga instanceof Rey) {
-//				posicionesEnemigas.addAll(enemiga.getProximosMovimientos(Collections2.filter(piezas, input -> !input.equals(enemiga))));
-				posicionesEnemigas.addAll(enemiga.getProximosMovimientos(Collections2.filter(piezas, input -> !input.equals(this.pieza))));
+				posicionesEnemigas.addAll(enemiga.getProximosMovimientos(Collections2.filter(piezas, input -> !input.equals(enemiga))));
+				posicionesEnemigas.add(enemiga.posicionActual);
+				//				posicionesEnemigas.addAll(enemiga.getProximosMovimientos(Collections2.filter(piezas, input -> !input.equals(this.pieza))));
 			} else {
 				posicionesEnemigas.addAll(enemiga.getProximosMovimientos(piezas));
 			}

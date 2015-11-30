@@ -315,6 +315,10 @@ public class PiezasManager {
 								GameState state2 = new GameState(negra, blancas, negras);
 								if(!gameStates.contains(state2)) { // si el movimiento no fue jugado antes
 									gameStates.add(state2);
+									Map<Posicion, Pieza> mapa_blancas = Maps.uniqueIndex(blancas, (Function<Pieza, Posicion>) input -> input.posicionActual);
+									if(mapa_blancas.get(posicionNegra) != null) {
+										continue; // se descarta la captura por parte del negro...
+									}
 									//TODO: Capturar pieza blanca...
 									for(Pieza blanca2 : blancas) {
 										Posicion posicionOriginalBlanca2 = blanca2.posicionActual;
