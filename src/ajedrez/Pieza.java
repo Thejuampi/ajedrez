@@ -48,7 +48,7 @@ public class Pieza {
 	
 	@Override
 	public String toString() {
-		return "Pieza [nombre=" + nombre + ", posicionActual=" + posicionActual + "]";
+		return nombre + posicionActual + (isBlanca() ? "BLANCA" : "NEGRA");
 	}
 
 	@Override

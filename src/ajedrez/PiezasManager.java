@@ -323,8 +323,8 @@ public class PiezasManager {
 											GameState state3 = new GameState(blanca2, blancas, negras);
 											if(!gameStates.contains(state3)) {
 												gameStates.add(state3);
+												//Tiene un problema: usa el rey para dar jaque mate... ja
 												if(isJaqueMate(blanca2, posicionBlanca2, blancas, negras)) {
-													// TODO CORREGIR: blanca = blanca2 => el movimiento no se muestra correctamente
 													return Arrays.asList(copiaBlanca, negra, blanca2);
 												}	
 											} 

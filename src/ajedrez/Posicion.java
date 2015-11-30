@@ -65,7 +65,7 @@ public class Posicion {
 
 	@Override
 	public String toString() {
-		return "["+columna+fila+"]";
+		return /*"["+*/columna+fila/*+"]"*/;
 	}
 
 }
